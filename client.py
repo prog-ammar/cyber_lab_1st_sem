@@ -3,7 +3,7 @@ import subprocess
 import random
 from io import BytesIO
 import sys
-import ensurepip
+
 
 
 def webcam_pic(s,data):
@@ -87,10 +87,6 @@ def connect():
 
 
 def main():
-     try :
-        import pip
-     except ImportError:
-        ensurepip.bootstrap()
      try:
         import cv2
      except ImportError:
