@@ -4,6 +4,7 @@ import random
 from io import BytesIO
 import sys
 import ensurepip
+import os
 
 
 def webcam_pic(s,data):
