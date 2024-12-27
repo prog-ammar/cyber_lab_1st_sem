@@ -1,8 +1,6 @@
 import socket
 import subprocess
-import cv2
 import random
-from PIL import ImageGrab
 from io import BytesIO
 import sys
 import ensurepip
