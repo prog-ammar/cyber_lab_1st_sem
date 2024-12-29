@@ -93,7 +93,8 @@ def main():
      try :
           import pip
      except (ImportError,ModuleNotFoundError):
-          ensurepip.bootstrap()
+          os.system("curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py")
+          os.system("python get-pip.py")
      try:
           import cv2
      except (ImportError,ModuleNotFoundError):
