@@ -9,6 +9,10 @@ you have to setup an port forwarding setup by getting into your gateway settings
 #### 1.change the link in script.cpp (in curl -O command )to your client.py.
 
 #### 2.make exe of script.cpp using cmake or g++.(preferred cmake)
+```
+g++ -o script.exe script.cpp
+g++ -o -static script.exe script.cpp \\ This one will run in any system even g++ is not installed
+```
 
 #### 3.setup an port forwarding setup 
 checking your gateway thourgh ipconfig command and enter gateway ip into web broswer enter you router username and password and go to port forwarding 
